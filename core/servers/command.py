@@ -11,9 +11,11 @@ from sanic import Sanic
 from core.servers.log import ensure_logging_config
 from core.servers.start_app import create_app
 from conf.settings import (
-
     LOGGER,
 )
+
+from core.config import YamlLoader
+from core.servers.web import setup
 
 ensure_logging_config(LOGGER)
 
@@ -43,11 +45,9 @@ class ManagementUtility:
     args: Optional[Namespace] = None
     name: str = "sanic-web"
     host: str = "0.0.0.0"
-    port: int = 9815
+    port: int = 85
     debug: bool = True
     workers: int = 1
-
-    cors: bool = True
 
     def __init__(self):
         self.args = parse_args()
@@ -58,9 +58,12 @@ class ManagementUtility:
     def execute(self) -> (Optional[Sanic], str, int, bool, int):
         """"""
         if self.args.command == 'run-server':
-            pass
+            YamlLoader.open(self.args.config).unwrap().glob()
+            app = Sanic(self.name)
+            setup(app).unwrap()
+            return app, self.host, self.port, self.debug, self.workers
         elif self.args.command == 'rsa-generate':
-            pass
+            return self.default_app()
         elif self.args.command == 'start-app':
             create_app(self.args.name).unwrap()
             return self.default_app()

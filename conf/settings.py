@@ -6,17 +6,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CORS_CONFIG = {
-    "resources": {"/*": {"origins": "*"}},
-    "origins": "*",
-    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    "allow_headers": ["*"],
-    "expose_headers": ["*"],
-    "supports_credentials": True,  # 允许凭据
-    "max_age": 3600,
-    "automatic_options": True,
-    "vary_header": True
-}
+INSTALL_APPS = [
+    'apps.admin',
+]
+
+VIEWS_DIR = 'views'
 
 # ===================================================logger=============================================================
 

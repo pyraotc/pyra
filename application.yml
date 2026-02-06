@@ -8,6 +8,9 @@ SERVER:
 
 # 此配置项会自动挂载到 sanic app
 CONFIG:
+  # 开发环境(production)与测试环境(development)
+  ENVIRONMENT: development
+
   # 使用缓存 simple(内存)、redis、memcached
   CACHE_TYPE: simple
   # redis
@@ -54,6 +57,8 @@ CONFIG:
   CORS_VARY_HEADER: true
 
   # 启用/禁用 swagger
+  # /documentation/swagger
+  # documentation/redoc
   OAS: true
   # "redoc", "elements"
   OAS_UI_DEFAULT: swagger

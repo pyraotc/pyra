@@ -22,6 +22,8 @@ class SessionMessage(models.Model):
 
     metadata = fields.JSONField(null=True, description="元数据")
 
+    files = fields.JSONField(null=True, description="文件信息")
+
     class Meta:
         table = 'session_messages'
         table_description = "session 消息内容"

@@ -7,10 +7,14 @@ from result import Result, Ok, Err
 from sanic_ext import Extend
 from sanic_compress import Compress
 
+from typing import Dict
+
 from conf.settings import (
     INSTALL_APPS,
     VIEWS_DIR
 )
+
+from core.db.client import tortoise
 
 
 def discover_blueprints(srv: Sanic):
@@ -37,6 +41,58 @@ def discover_blueprints(srv: Sanic):
                 continue
 
 
+def discover_modules() -> Result[Dict, Exception]:
+    """获取模型"""
+    models = {}
+    for app_path in INSTALL_APPS:
+        app_name = app_path.split('.')[-1]
+        if app_name:
+            try:
+                # 动态导入models模块
+                models_module = __import__(f"{app_path}.models", fromlist=[''])
+                has_models = False
+                # 获取模块的所有属性
+                module_dict = models_module.__dict__
+                for key, value in module_dict.items():
+                    if not key.startswith('__') and not isinstance(value, type(__import__('sys'))):
+                        if isinstance(value, type):
+                            has_models = True
+                            break
+                        elif hasattr(value, '__module__'):
+                            if value.__module__.startswith(app_path):
+                                has_models = True
+                                break
+                if has_models:
+                    models[app_name] = [f"{app_path}.models"]
+            except Exception as exc:
+                return Err(exc)
+    return Ok(models)
+
+
+def get_tortoise_url() -> Result[str, Exception]:
+    """获取db_url"""
+    from core.config import settings
+    max_size = settings.get_int("DATABASE.MAX_SIZE", 10)
+    min_size = settings.get_int("DATABASE.MIN_SIZE", 1)
+    charset = settings.get_str("DATABASE.CHARSET", "utf8mb4")
+    host = settings.get_str("DATABASE.HOST", None)
+    port = settings.get_int("DATABASE.PORT", None)
+    username = settings.get_str("DATABASE.USERNAME", None)
+    password = settings.get_str("DATABASE.PASSWORD", None)
+    name = settings.get_str("DATABASE.NAME", None)
+
+    match settings.get("DATABASE.ENGINE"):
+        case "pgsql":
+            return Ok(f"postgres://{username}:{password}@{host}:{port}/{name}?max_size={max_size}&min_size={min_size}")
+        case "mysql":
+            return Ok(
+                f"mysql://{username}:{password}@{host}:{port}/{name}?max_size={max_size}&min_size={min_size}&charset={charset}")
+        case "polar":
+            return Ok(f"postgres://{username}:{password}@{host}:{port}/{name}?max_size={max_size}&min_size={min_size}")
+        case _:
+            return Err(Exception(f"{settings.get('DATABASE.ENGINE')} nonsupport"))
+
+
 def setup(app: Sanic) -> Result[bool, Exception]:
     try:
         from core.config import settings
@@ -48,6 +104,10 @@ def setup(app: Sanic) -> Result[bool, Exception]:
 
         # 蓝图注册
         discover_blueprints(app)
+
+        # 注册模型
+        modules = discover_modules().unwrap()
+        tortoise(app, get_tortoise_url().unwrap(), modules, settings.get_bool("DATABASE.GENERATE_SCHEMAS"))
 
         app.ext.openapi.describe(
             title="Sanic Web API",

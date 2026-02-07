@@ -2,9 +2,23 @@ NAME: sanic-web
 
 SERVER:
   HOST: 0.0.0.0
-  PORT: 85
+  PORT: 9815
   DEBUG: false
-  WORKERS: 4
+  WORKERS: 1
+
+DATABASE:
+  ENGINE: pgsql # pgsql、mysql polar
+  HOST: 127.0.0.1
+  PORT: 5432
+  USERNAME: root
+  PASSWORD: root
+  NAME: pyra
+
+  MAX_SIZE: 10
+  MIN_SIZE: 5
+  CHARSET: utf8mb4
+  # 是否自动生成表结构
+  GENERATE_SCHEMAS: true
 
 # 此配置项会自动挂载到 sanic app
 CONFIG:

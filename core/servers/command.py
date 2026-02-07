@@ -7,6 +7,7 @@ from argparse import Namespace
 from typing import Optional
 
 from sanic import Sanic
+from result import Result, Ok, Err
 
 from core.servers.log import ensure_logging_config
 from core.servers.start_app import create_app
@@ -55,10 +56,29 @@ class ManagementUtility:
     def default_app(self):
         return None, self.host, self.port, self.debug, self.workers
 
+    def reset_server(self) -> Result[bool, Exception]:
+        """"""
+        from core.config import settings as cfg
+        try:
+            self.name = cfg.get_str("NAME", "sanic-web")
+            self.host = (lambda ip, default="0.0.0.0": ip if all(
+                part.isdigit() and 0 <= int(part) <= 255 for part in ip.split('.')) and len(
+                ip.split('.')) == 4 else default)(
+                cfg.get("SERVER.HOST", "0.0.0.0"))
+            self.port = (lambda p, default=8000: int(p) if str(p).isdigit() and 0 <= int(p) <= 65535 else default)(
+                cfg.get("SERVER.PORT", 8000))
+            self.debug = cfg.get_bool("SERVER.DEBUG", False)
+            self.workers = cfg.get_int("SERVER.WORKERS", 1)
+            return Ok(True)
+        except Exception as exc:
+            return Err(exc)
+
     def execute(self) -> (Optional[Sanic], str, int, bool, int):
         """"""
         if self.args.command == 'run-server':
             YamlLoader.open(self.args.config).unwrap().glob()
+            self.reset_server().unwrap()
+
             app = Sanic(self.name)
             setup(app).unwrap()
             return app, self.host, self.port, self.debug, self.workers

@@ -1,4 +1,8 @@
 {
   "name": "admin",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "data": [
+    "data/admin.xml",
+    "data/groups.xml"
+  ]
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<pyra>
+    <record id="groups_create_public_groups" model="groups" noupdate="0">
+        <field name="name">Public Group</field>
+        <field name="default">true</field>
+        <field name="comment">公共用户组</field>
+    </record>
+</pyra>

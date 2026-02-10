@@ -77,7 +77,9 @@ dependencies = [
     "py2neo (>=2021.2.4,<2022.0.0)",
     "neo4j (>=6.1.0,<7.0.0)",
     "pycryptodome (>=3.23.0,<4.0.0)",
-    "aioredlock (>=0.7.3,<0.8.0)"
+    "aioredlock (>=0.7.3,<0.8.0)",
+    "qdrant-client (>=1.16.2,<2.0.0)",
+    "langchain-qdrant (>=1.1.0,<2.0.0)"
 ]
 
 

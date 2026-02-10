@@ -83,6 +83,8 @@ class ManagementUtility:
             setup(app).unwrap()
             return app, self.host, self.port, self.debug, self.workers
         elif self.args.command == 'rsa-generate':
+            from core.servers.rsa_utils import generate_rsa_key
+            generate_rsa_key(self.args.path).unwrap()
             return self.default_app()
         elif self.args.command == 'start-app':
             create_app(self.args.name).unwrap()

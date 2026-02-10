@@ -1,5 +1,7 @@
 NAME: sanic-web
 
+ENABLED_SCHEDULE: true
+
 SERVER:
   HOST: 0.0.0.0
   PORT: 9815

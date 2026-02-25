@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  pyra:
+    image: python:3.11.9-slim
+    container_name: pyra
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONPATH=/app
+      - STATIC_DIR=/var/pyra/data
+    volumes:
+      - ./application.yml:/var/pyra/conf/application.yml
+      - ./logs:/var/pyra/logs
+      - ./data:/var/pyra/data
+    ports:
+      - "9815:9815"
+    working_dir: /app
+    command: ["python", "main.py", "run-server", "-c", "/var/pyra/conf/application.yml"]

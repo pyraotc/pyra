@@ -1,0 +1,111 @@
+NAME: pyra
+
+ENABLED_SCHEDULE: true
+
+SERVER:
+  HOST: 0.0.0.0
+  PORT: 9815
+  DEBUG: false
+  WORKERS: 1
+
+DATABASE:
+  ENGINE: pgsql # pgsql、mysql polar
+  HOST: 127.0.0.1
+  PORT: 5432
+  USERNAME: root
+  PASSWORD: root
+  NAME: pyra
+
+  MAX_SIZE: 10
+  MIN_SIZE: 5
+  CHARSET: utf8mb4
+  # 是否自动生成表结构
+  GENERATE_SCHEMAS: true
+
+# 此配置项会自动挂载到 sanic app
+CONFIG:
+  # 开发环境(production)与测试环境(development)
+  ENVIRONMENT: development
+
+  # 使用缓存 simple(内存)、redis、memcached
+  CACHE_TYPE: simple
+  # redis
+  CACHE_REDIS_HOST: localhost
+  CACHE_REDIS_PORT: 6379
+  CACHE_REDIS_PASSWORD: root
+  CACHE_REDIS_DB: 0
+  # memcached
+  CACHE_MEMCACHED_SERVERS:
+    - 127.0.0.1:11211
+
+  CORS_LOGGING: true
+  # 允许的源，可以是字符串、列表或正则表达式
+  # 当 CORS_SUPPORTS_CREDENTIALS 为true时 CORS_ORIGINS不能为通配符
+  CORS_ORIGINS:
+    - "*"
+  # 允许的HTTP方法
+  CORS_METHODS:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+    - PATCH
+  # 允许的请求头
+  CORS_ALLOW_HEADERS:
+    - "*"
+  # 允许暴露的响应头
+  CORS_EXPOSE_HEADERS:
+    - "*"
+  # 是否允许携带凭据（cookies、HTTP认证等）
+  CORS_SUPPORTS_CREDENTIALS: false
+  # 预检请求缓存时间（秒）
+  CORS_MAX_AGE: 600
+  # 是否发送CORS头
+  CORS_SEND_WILDCARD: false
+  # 是否自动添加允许的头部
+  CORS_AUTOMATIC_OPTIONS: true
+  # 是否将CORS应用于WebSocket
+  CORS_APPLY_TO_WEBSOCKET: false
+  # 对简单请求总是添加CORS头（即使Origin不在允许列表中）
+  CORS_ALWAYS_SEND: false
+  # 允许的Vary头值
+  CORS_VARY_HEADER: true
+
+  # 启用/禁用 swagger
+  # /documentation/swagger
+  # documentation/redoc
+  OAS: true
+  # "redoc", "elements"
+  OAS_UI_DEFAULT: swagger
+  OAS_URL_PREFIX: /documentation
+  OAS_UI_PATH: /swagger
+
+  # 启用特定功能
+  EXT_ENABLED:
+    - cors
+    - openapi
+    - validation
+  # 禁用特定功能
+  #  EXT_DISABLED:
+  #    - openapi
+
+  # 默认过期时间（秒）
+  CACHE_DEFAULT_TIMEOUT: 300
+  # 缓存键前缀
+  CACHE_KEY_PREFIX: sanic_cache_
+  # 禁用空值警告
+  CACHE_NO_NULL_WARNING: true
+
+  # 是否开启响应压缩
+  COMPRESS_ENABLE: true
+  COMPRESS_MIMETYPES:
+    - text/html
+    - text/css
+    - text/xml
+    - application/json
+    - application/javascript
+  # 压缩级别 (1-9，默认为 6)
+  COMPRESS_LEVEL: 6
+  # 超过则压缩
+  COMPRESS_MIN_SIZE: 500

@@ -5,16 +5,10 @@ from tortoise import fields, models
 
 
 class IrLogger(models.Model):
-    LOG_TYPE_CHOICES = [
-        ('user', '用户日志'),  # 用户登录、修改密码、个人操作等
-        ('system', '系统日志'),  # 系统运行、自动化任务、后台操作等
-    ]
-
     id = fields.IntField(pk=True)
 
     log_type = fields.CharField(
         max_length=10,
-        choices=LOG_TYPE_CHOICES,
         description="日志类型",
         index=True
     )

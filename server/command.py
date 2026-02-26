@@ -91,12 +91,15 @@ class ManagementUtility:
 
     def execute(self) -> (Optional[Sanic], str, int, bool, int):
         """"""
+        from tokio.tasks import Task
+
         if self.args.command == 'run-server':
             YamlLoader.open(self.args.config).unwrap().glob()
             self.reset_server().unwrap()
 
             app = Sanic(self.name)
             setup(app).unwrap()
+            app.ctx.task = Task()
             return app, self.host, self.port, self.debug, self.workers
         elif self.args.command == 'rsa-generate':
             generate_rsa_key(self.args.path).unwrap()

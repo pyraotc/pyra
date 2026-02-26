@@ -112,3 +112,24 @@ class ManagementUtility:
 def execute_from_command() -> (Optional[Sanic], str, int, bool, int):
     utility = ManagementUtility()
     return utility.execute()
+
+
+async def load_data(srv, loop):
+    """"""
+    from server.parse2xml import Parse2XML
+    from rcc.config import BASE_DIR, INSTALL_APPS
+
+    parse = Parse2XML()
+
+    for app_name in INSTALL_APPS:
+        try:
+            app_path = BASE_DIR / app_name.replace('.', '/')
+            manifest_path = app_path / 'manifest.json'
+            if not manifest_path.exists():
+                logger.warning(f"Manifest file not found for app {app_name}: {manifest_path}")
+                continue
+            await parse.parse(app_name.split('.')[-1], manifest_path)
+        except Exception as exc:
+            logger.error(f"Error processing app {app_name}: {str(exc)}")
+    # 为所有用户分配默认用户组
+    logger.info("All apps initialized successfully")

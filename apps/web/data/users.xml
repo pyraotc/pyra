@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<pyra>
+    <record id="users_create_admin_user" model="users" noupdate="0">
+        <field name="name">超级管理员</field>
+        <field name="email">admin@pyra.com</field>
+        <field name="password">eval("""
+            bcrypt.hashpw("admin".encode(), bcrypt.gensalt()).decode()
+            """)
+        </field>
+        <field name="superuser">true</field>
+        <field name="is_update_password">true</field>
+    </record>
+</pyra>

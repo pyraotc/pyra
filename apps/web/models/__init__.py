@@ -3,3 +3,5 @@
 
 from .ir_model_data import IrModelData
 from .ir_logger import IrLogger
+
+from .users import User

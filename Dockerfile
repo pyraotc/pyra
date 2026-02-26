@@ -38,4 +38,4 @@ COPY --from=builder /app /app
 
 EXPOSE 9815
 
-CMD ["python", "main.py", "run-server", "-c", "/var/pyra/conf/application.yml"]
+#CMD ["python", "main.py", "run-server", "-c", "/var/pyra/conf/application.yml"]

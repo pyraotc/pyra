@@ -1,0 +1,2 @@
+worker:  celery -A schedule worker --pool=threads --concurrency=4 --loglevel=info
+beat: celery -A schedule beat --loglevel=info

@@ -68,6 +68,10 @@ class Skill:
         except Exception as exc:
             return Err(exc)
 
+    def skills_prompt(self) -> str:
+        """获取skills封装模板"""
+        return "\n\n".join([skill_info["description"] for _, skill_info in self.skills.items()])
+
     def read_skills(self, name: str) -> Result[str, Exception]:
         """获取指定的skills"""
         try:

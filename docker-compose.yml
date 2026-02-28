@@ -39,7 +39,7 @@ services:
       - ./logs:/var/pyra/logs
       - ./data:/var/pyra/data
     ports:
-      - "9815:9815"
+      - "9815"
     working_dir: /app
     command: [ "celery", "-A", "schedule", "worker", "--pool=threads", "--concurrency=4", "--loglevel=info" ]
 
@@ -60,6 +60,6 @@ services:
       - ./logs:/var/pyra/logs
       - ./data:/var/pyra/data
     ports:
-      - "9815:9815"
+      - "9815"
     working_dir: /app
     command: [ "celery", "-A", "schedule", "beat", "--loglevel=info" ]

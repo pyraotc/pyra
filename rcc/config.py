@@ -8,6 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 INSTALL_APPS = [
     'apps.web',
+    # 灵犀智能AI助手
+    'apps.lincy',
 ]
 
 VIEWS_DIR = 'views'
